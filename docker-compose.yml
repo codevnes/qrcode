@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  traefik:
+    image: "traefik:v2.10" # Use a specific version
+    container_name: "traefik"
+    command:
+      # Enable Docker provider
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      # Define Entrypoints
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      # Enable Let's Encrypt (ACME)
+      - "--certificatesresolvers.myresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.myresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.myresolver.acme.email=your-email@yourdomain.com" # !!! REPLACE WITH YOUR EMAIL !!!
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"
+      # Enable API (optional, for dashboard - secure it properly in production)
+      # - "--api.insecure=true"
+      # Redirect HTTP to HTTPS
+      - "--entrypoints.web.http.redirections.entrypoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+    ports:
+      - "80:80"    # HTTP
+      - "443:443"  # HTTPS
+      # - "8080:8080" # Traefik Dashboard (if API enabled)
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro" # Allow Traefik to listen to Docker events
+      - "letsencrypt:/letsencrypt" # Persist Let's Encrypt certificates
+    networks:
+      - web # Use a shared network
+    restart: unless-stopped
+
+  qr-app:
+    build:
+      context: . # Build from the Dockerfile in the current directory
+    container_name: qr-app
+    restart: unless-stopped
+    networks:
+      - web # Connect to the same network as Traefik
+    labels:
+      # Traefik specific labels
+      - "traefik.enable=true"
+      # --- HTTP Router --- Define how requests are routed (HTTP)
+      - "traefik.http.routers.qr-app-http.rule=Host(`qr.yourdomain.com`)" # !!! REPLACE WITH YOUR DOMAIN !!!
+      - "traefik.http.routers.qr-app-http.entrypoints=web"
+      # --- HTTPS Router --- Define how requests are routed (HTTPS)
+      - "traefik.http.routers.qr-app-secure.rule=Host(`qr.yourdomain.com`)" # !!! REPLACE WITH YOUR DOMAIN !!!
+      - "traefik.http.routers.qr-app-secure.entrypoints=websecure"
+      - "traefik.http.routers.qr-app-secure.tls=true"
+      - "traefik.http.routers.qr-app-secure.tls.certresolver=myresolver" # Use the Let's Encrypt resolver defined above
+      # --- Service Definition --- Define how Traefik connects to the service
+      - "traefik.http.services.qr-app-service.loadbalancer.server.port=3000" # Your app's internal port
+
+networks:
+  web:
+    name: traefik_web # You can name the network explicitly
+    external: false # Creates a new network
+
+volumes:
+  letsencrypt:
+    name: traefik_letsencrypt # Explicit name for the volume 
