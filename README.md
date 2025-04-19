@@ -19,7 +19,9 @@ This application generates QR codes for Vietnamese bank payments using the VietQ
 
 ## Quick Start
 
-### For Linux/macOS Users
+### For Production (With SSL)
+
+#### Linux/macOS Users
 
 1. Clone this repository
 2. Run the setup script:
@@ -32,7 +34,7 @@ This application generates QR codes for Vietnamese bank payments using the VietQ
    docker-compose up -d
    ```
 
-### For Windows Users
+#### Windows Users
 
 1. Clone this repository
 2. Run the PowerShell setup script:
@@ -43,6 +45,32 @@ This application generates QR codes for Vietnamese bank payments using the VietQ
 4. Start the application:
    ```powershell
    docker-compose up -d
+   ```
+
+### For Local Development (Without SSL)
+
+#### Linux/macOS Users
+
+1. Clone this repository
+2. Run the setup script to configure your environment:
+   ```bash
+   ./setup.sh
+   ```
+3. Start the application in local mode:
+   ```bash
+   ./local.sh
+   ```
+
+#### Windows Users
+
+1. Clone this repository
+2. Run the PowerShell setup script to configure your environment:
+   ```powershell
+   .\setup.ps1
+   ```
+3. Start the application in local mode:
+   ```powershell
+   .\local.ps1
    ```
 
 ## Usage
@@ -110,6 +138,56 @@ If you're having trouble with SSL certificate generation:
    ```bash
    docker-compose logs traefik
    ```
+
+4. If you're testing locally or don't need SSL, use the local mode instead:
+   ```bash
+   ./local.sh  # For Linux/macOS
+   # or
+   .\local.ps1  # For Windows
+   ```
+
+5. If you're behind a firewall or NAT, Let's Encrypt may not be able to reach your server for validation. In this case, you might need to:
+   - Configure port forwarding on your router
+   - Use a different ACME challenge method
+   - Use a reverse proxy service like Cloudflare
+
+## Checking Logs
+
+You can check the logs of your Docker containers using the following commands:
+
+### View All Logs
+
+```bash
+docker-compose logs
+```
+
+### View Logs for a Specific Service
+
+```bash
+docker-compose logs app
+# or
+docker-compose logs traefik
+```
+
+### Follow Logs in Real-Time
+
+```bash
+docker-compose logs -f
+# or for a specific service
+docker-compose logs -f app
+```
+
+### View Limited Number of Lines
+
+```bash
+docker-compose logs --tail=100
+```
+
+### View Logs with Timestamps
+
+```bash
+docker-compose logs --timestamps
+```
 
 ## License
 
