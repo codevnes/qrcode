@@ -63,6 +63,10 @@ HTTPS_PORT=${HTTPS_PORT:-443}
 read -p "Enter application port [3000]: " PORT
 PORT=${PORT:-3000}
 
+# Get dashboard port (default: 8080)
+read -p "Enter Traefik dashboard port [8080]: " DASHBOARD_PORT
+DASHBOARD_PORT=${DASHBOARD_PORT:-8080}
+
 # Generate Traefik auth credentials
 read -p "Enter username for Traefik dashboard [admin]: " TRAEFIK_USER
 TRAEFIK_USER=${TRAEFIK_USER:-admin}
@@ -95,6 +99,7 @@ EMAIL=$EMAIL
 HTTP_PORT=$HTTP_PORT
 HTTPS_PORT=$HTTPS_PORT
 PORT=$PORT
+DASHBOARD_PORT=$DASHBOARD_PORT
 
 # Traefik dashboard authentication
 TRAEFIK_AUTH=$TRAEFIK_AUTH
@@ -106,7 +111,7 @@ echo -e "${GREEN}Configuration saved to .env file.${NC}"
 if command_exists lsof; then
   HTTP_PORT_CHECK=$(lsof -i :$HTTP_PORT | grep LISTEN)
   HTTPS_PORT_CHECK=$(lsof -i :$HTTPS_PORT | grep LISTEN)
-  
+
   if [ ! -z "$HTTP_PORT_CHECK" ] || [ ! -z "$HTTPS_PORT_CHECK" ]; then
     echo -e "${YELLOW}Warning: Ports $HTTP_PORT and/or $HTTPS_PORT may be in use.${NC}"
     echo -e "${YELLOW}If you have OpenLiteSpeed running, you may need to stop it or use different ports.${NC}"

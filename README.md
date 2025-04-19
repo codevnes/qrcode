@@ -74,6 +74,7 @@ EMAIL=your-email@example.com
 HTTP_PORT=80
 HTTPS_PORT=443
 PORT=3000
+DASHBOARD_PORT=8080
 
 # Traefik dashboard authentication
 TRAEFIK_AUTH=admin:$$apr1$$q8eZFHjF$$Fvmkk//V6Btlaf2i/ju5n/

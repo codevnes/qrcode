@@ -66,6 +66,10 @@ if ([string]::IsNullOrEmpty($HTTPS_PORT)) { $HTTPS_PORT = "443" }
 $PORT = Read-Host "Enter application port [3000]"
 if ([string]::IsNullOrEmpty($PORT)) { $PORT = "3000" }
 
+# Get dashboard port (default: 8080)
+$DASHBOARD_PORT = Read-Host "Enter Traefik dashboard port [8080]"
+if ([string]::IsNullOrEmpty($DASHBOARD_PORT)) { $DASHBOARD_PORT = "8080" }
+
 # Generate Traefik auth credentials
 $TRAEFIK_USER = Read-Host "Enter username for Traefik dashboard [admin]"
 if ([string]::IsNullOrEmpty($TRAEFIK_USER)) { $TRAEFIK_USER = "admin" }
@@ -94,6 +98,7 @@ EMAIL=$EMAIL
 HTTP_PORT=$HTTP_PORT
 HTTPS_PORT=$HTTPS_PORT
 PORT=$PORT
+DASHBOARD_PORT=$DASHBOARD_PORT
 
 # Traefik dashboard authentication
 TRAEFIK_AUTH=$TRAEFIK_AUTH
