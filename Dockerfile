@@ -14,5 +14,11 @@ RUN npm ci --only=production
 # Bundle app source
 COPY . .
 
-EXPOSE 3000
-CMD [ "node", "server.js" ] 
+# Use environment variable for port with default value
+ENV PORT=3000
+
+# Expose the port from the environment variable
+EXPOSE ${PORT}
+
+# Start the application
+CMD [ "node", "server.js" ]

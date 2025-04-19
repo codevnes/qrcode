@@ -3,10 +3,13 @@ const { QRPay, BanksObject } = require('vietnam-qr-pay');
 const QRCode = require('qrcode');
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 // Middleware to parse JSON bodies (for POST requests)
 app.use(express.json());
+
+// Trust proxy headers if the app is behind a reverse proxy
+app.set('trust proxy', true);
 
 app.get('/', (req, res) => {
   res.send('Hello World!');
@@ -27,14 +30,14 @@ app.all('/generate-qr', async (req, res) => {
     }
 
     const qrPay = QRPay.initVietQR({
-        bankBin: BanksObject[bankKey].bin, //mbbank
+        bankBin: BanksObject[bankKey].bin,
         bankNumber: bankAccount,
         amount: amount,
         purpose: message || '',
     });
 
     const qrString = qrPay.build();
-    
+
     // Send HTML response with just the QR code image
     res.send(`
       <img src="${await QRCode.toDataURL(qrString, {
@@ -56,4 +59,4 @@ app.all('/generate-qr', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
-}); 
+});
