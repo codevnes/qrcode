@@ -1,7 +1,26 @@
-node_modules
-npm-debug.log
-Dockerfile
-.dockerignore
+# Git
 .git
 .gitignore
-README.md 
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Node.js
+node_modules
+npm-debug.log
+
+# Environment variables
+.env
+
+# Setup scripts
+setup.sh
+setup.ps1
+
+# Traefik
+traefik/
+
+# Documentation
+README.md
+LICENSE
