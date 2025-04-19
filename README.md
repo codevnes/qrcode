@@ -75,17 +75,47 @@ This application generates QR codes for Vietnamese bank payments using the VietQ
 
 ## Usage
 
-Once the application is running, you can generate QR codes by accessing:
+### Web Interface
+
+Once the application is running, you can access the web interface at:
+
+```
+https://your-domain.com/
+```
+
+This provides a user-friendly form to generate QR codes.
+
+### Direct API Access
+
+You can also generate QR codes programmatically by accessing:
 
 ```
 https://your-domain.com/generate-qr?bankKey=BANK_KEY&bankAccount=ACCOUNT_NUMBER&amount=AMOUNT&message=MESSAGE
 ```
+
+This will return a direct URL to the QR code image, which can be used in your applications.
+
+### Parameters
 
 Replace the following parameters:
 - `BANK_KEY`: The bank identifier (e.g., `VCB` for Vietcombank)
 - `ACCOUNT_NUMBER`: Your bank account number
 - `AMOUNT`: The payment amount (optional)
 - `MESSAGE`: The payment message (optional)
+
+### Image URLs
+
+The QR code images are accessible directly at:
+
+```
+https://your-domain.com/qr-images/[hash].png
+```
+
+Where `[hash]` is a unique identifier generated from the QR code parameters. This allows you to:
+
+1. Use the image URL directly in your applications
+2. Share the URL with others
+3. Embed the image in websites, emails, or documents
 
 ## Configuration
 
